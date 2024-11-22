@@ -1,6 +1,6 @@
 # reflections_app
 
-A new Flutter project.
+A Journal Entry App with awesome features
 
 ## Getting Started
 
