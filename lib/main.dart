@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 void main() {
   runApp(const ReflectionsApp());
 }
@@ -11,13 +12,29 @@ class ReflectionsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LaunchScreen(),
+      theme: ThemeData(
+        useMaterial3: true, // Enables Material 3 design system
+      ),
+      home: const LaunchScreen(),
     );
   }
 }
 
-class LaunchScreen extends StatelessWidget {
+class LaunchScreen extends StatefulWidget {
   const LaunchScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LaunchScreen> createState() => _LaunchScreenState();
+}
+
+class _LaunchScreenState extends State<LaunchScreen> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +43,18 @@ class LaunchScreen extends StatelessWidget {
         title: const Text("Reflections Launching"),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CreatePinScreen()),
-            );
-          },
-          child: const Text("NEW User"),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.displaySmall, // Updated style
+            ),
+            ElevatedButton(
+              onPressed: _incrementCounter,
+              child: const Icon(Icons.add),
+            ),
+          ],
         ),
       ),
     );
