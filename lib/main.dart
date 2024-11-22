@@ -1,45 +1,56 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ReflectionsApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ReflectionsApp extends StatelessWidget {
+  const ReflectionsApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Simple Button App',
-      theme: ThemeData(
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(),
+      debugShowCheckedModeBanner: false,
+      home: LaunchScreen(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
-  void _onButtonPressed() {
-    print('You clicked button');
-  }
+class LaunchScreen extends StatelessWidget {
+  const LaunchScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(133, 207, 245, 1), // Background color
+      appBar: AppBar(
+        title: const Text("Reflections Launching"),
+      ),
       body: Center(
         child: ElevatedButton(
-          onPressed: _onButtonPressed,
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-          child: const Text('Button'),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CreatePinScreen()),
+            );
+          },
+          child: const Text("NEW User"),
         ),
+      ),
+    );
+  }
+}
+
+class CreatePinScreen extends StatelessWidget {
+  const CreatePinScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Create Pin"),
+      ),
+      body: const Center(
+        child: Text("Pin Creation Screen"),
       ),
     );
   }
