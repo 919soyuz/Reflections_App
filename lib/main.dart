@@ -5,38 +5,58 @@
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'password.dart';
+
 
 void main() {
-  runApp(ReflectionsApp());
+  runApp(const ReflectionsApp());
 }
 
 class ReflectionsApp extends StatelessWidget {
+  const ReflectionsApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LaunchScreen(),
+      home: const LaunchScreen(),
     );
   }
 }
 
-//Launch screen for the app. V.1.0
 class LaunchScreen extends StatelessWidget {
+  const LaunchScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Reflections - Launch"),
+        title: const Text("Reflections - Launch"),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CreatePinScreen()),
-            );
-          },
-          child: Text("NEW USER"),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CreatePinScreen()),
+                );
+              },
+              child: const Text("NEW USER"),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomeScreen(welcomeBack: true)),
+                );
+              },
+              child: const Text("EXISTING USER"),
+            ),
+          ],
         ),
       ),
     );
@@ -44,19 +64,15 @@ class LaunchScreen extends StatelessWidget {
 }
 
 class CreatePinScreen extends StatefulWidget {
+  const CreatePinScreen({Key? key}) : super(key: key);
+
   @override
-  _CreatePinScreenState createState() => _CreatePinScreenState();
+  CreatePinScreenState createState() => CreatePinScreenState();
 }
 
-class _CreatePinScreenState extends State<CreatePinScreen> {
+class CreatePinScreenState extends State<CreatePinScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _pinController = TextEditingController();
-
-  Future<void> _saveUserInfo(String name, String pin) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('userName', name);
-    await prefs.setString('userPin', pin);
-  }
 
   void _onSubmit() async {
     String name = _nameController.text;
@@ -64,15 +80,17 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
 
     if (name.isEmpty || pin.length != 4 || int.tryParse(pin) == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Please enter a valid name and a 4-digit PIN")),
+        const SnackBar(content: Text("Please enter a valid name and a 4-digit PIN")),
       );
       return;
     }
 
-    await _saveUserInfo(name, pin);
+    // Save user info
+    await saveUserInfo(name, pin);
+
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => HomeScreen()),
+      MaterialPageRoute(builder: (context) => const HomeScreen(welcomeBack: false)),
     );
   }
 
@@ -80,43 +98,26 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Create Pin"),
+        title: const Text("Create Pin"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Create Pin for:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(
-                hintText: "Enter your name",
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              "Enter 4-digit PIN:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              decoration: const InputDecoration(hintText: "Enter your name"),
             ),
             TextField(
               controller: _pinController,
-              decoration: InputDecoration(
-                hintText: "Enter PIN",
-              ),
               maxLength: 4,
-              keyboardType: TextInputType.number,
               obscureText: true,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(hintText: "Enter 4-digit PIN"),
             ),
-            SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: _onSubmit,
-                child: Text("Save & Continue"),
-              ),
+            ElevatedButton(
+              onPressed: _onSubmit,
+              child: const Text("Save & Continue"),
             ),
           ],
         ),
@@ -125,42 +126,17 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
   }
 }
 
-// Stateful widget representing the home screen
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
+class HomeScreen extends StatelessWidget {
+  final bool welcomeBack;
 
-class _HomeScreenState extends State<HomeScreen> {
-  int _clickCount = 0;
-
-  void _incrementClickCount() {
-    setState(() {
-      _clickCount++;
-    });
-  }
+  const HomeScreen({Key? key, required this.welcomeBack}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Home Screen"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: _incrementClickCount,
-              child: Text("Click"),
-            ),
-            SizedBox(height: 20),
-            Text(
-              "Clicked $_clickCount times",
-              style: TextStyle(fontSize: 18),
-            ),
-          ],
-        ),
+      appBar: AppBar(title: const Text("Home Screen")),
+      body: Center(
+        child: Text(welcomeBack ? "Welcome back!" : "Welcome!"),
       ),
     );
   }
