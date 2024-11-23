@@ -17,8 +17,9 @@ Future<void> saveUserInfo(String username, String pin) async {
     await file.create(recursive: true);
   }
 
-  // Append new user info to the file
-  await file.writeAsString('$username:$pin\n', mode: FileMode.append);
+  await file.writeAsString('$username:$pin\n', mode: FileMode.append, flush: true);
+
+  print("User info saved: $username:$pin");
 }
 
 // Read all user info from the file
@@ -29,8 +30,11 @@ Future<List<String>> readUserInfo() async {
 
     // Read the file contents if it exists
     if (await file.exists()) {
-      return await file.readAsLines();
+      List<String> lines = await file.readAsLines();
+      print("User info read from file: $lines");
+      return lines;
     } else {
+      print("File does not exist.");
       return [];
     }
   } catch (e) {

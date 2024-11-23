@@ -3,17 +3,16 @@
 //Reflections App
 
 
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'password.dart';
-
 
 void main() {
   runApp(const ReflectionsApp());
 }
 
 class ReflectionsApp extends StatelessWidget {
-  const ReflectionsApp({Key? key}) : super(key: key);
+  const ReflectionsApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class ReflectionsApp extends StatelessWidget {
 }
 
 class LaunchScreen extends StatelessWidget {
-  const LaunchScreen({Key? key}) : super(key: key);
+  const LaunchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +63,7 @@ class LaunchScreen extends StatelessWidget {
 }
 
 class CreatePinScreen extends StatefulWidget {
-  const CreatePinScreen({Key? key}) : super(key: key);
+  const CreatePinScreen({super.key});
 
   @override
   CreatePinScreenState createState() => CreatePinScreenState();
@@ -78,6 +77,7 @@ class CreatePinScreenState extends State<CreatePinScreen> {
     String name = _nameController.text;
     String pin = _pinController.text;
 
+// please read line the 3rd line below this and guess what it does.
     if (name.isEmpty || pin.length != 4 || int.tryParse(pin) == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please enter a valid name and a 4-digit PIN")),
@@ -85,8 +85,15 @@ class CreatePinScreenState extends State<CreatePinScreen> {
       return;
     }
 
-    // Save user info
+    //This step is pretty important, so DONT TOUCH it unless you want the app to forget the user
     await saveUserInfo(name, pin);
+
+    // Add a short delay before reading the file to ensure it's flushed and available
+    await Future.delayed(const Duration(seconds: 1));
+
+    // Test reading the file immediately after saving
+    List<String> userInfo = await readUserInfo();
+    print("User info from file: $userInfo");
 
     Navigator.pushReplacement(
       context,
@@ -129,8 +136,9 @@ class CreatePinScreenState extends State<CreatePinScreen> {
 class HomeScreen extends StatelessWidget {
   final bool welcomeBack;
 
-  const HomeScreen({Key? key, required this.welcomeBack}) : super(key: key);
+  const HomeScreen({super.key, required this.welcomeBack});
 
+// Creates HomeScreen message... should be obvious
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,3 +149,4 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+

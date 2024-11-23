@@ -1,4 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <!-- added this users permission for read and write capabilities -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- added users permission for read and write capabilities -->
+
     <application
         android:label="reflections_app"
         android:name="${applicationName}"
