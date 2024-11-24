@@ -78,7 +78,7 @@ class CreatePinScreenState extends State<CreatePinScreen> {
   void _onSubmit() async {
     String name = _nameController.text;
     String pin = _pinController.text;
-// please read line the 3rd line below this and guess what it does.
+
     if (name.isEmpty || pin.length != 4 || int.tryParse(pin) == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please enter a valid name and a 4-digit PIN")),
@@ -86,15 +86,14 @@ class CreatePinScreenState extends State<CreatePinScreen> {
       return;
     }
 
-
-    //This step is pretty important, so DONT TOUCH it unless you want the app to forget the user
+    // Save user info to the file permanently
     await saveUserInfo(name, pin);
 
-    await Future.delayed(const Duration(seconds: 1));
-
+    // Verify by reading the file immediately
     List<String> userInfo = await readUserInfo();
-    print("User info from file: $userInfo");
+    print("User info from file after saving: $userInfo");
 
+    // Navigate to HomeScreen after saving
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const HomeScreen(welcomeBack: false)),
