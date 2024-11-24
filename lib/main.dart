@@ -78,7 +78,6 @@ class CreatePinScreenState extends State<CreatePinScreen> {
   void _onSubmit() async {
     String name = _nameController.text;
     String pin = _pinController.text;
-
 // please read line the 3rd line below this and guess what it does.
     if (name.isEmpty || pin.length != 4 || int.tryParse(pin) == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -87,13 +86,12 @@ class CreatePinScreenState extends State<CreatePinScreen> {
       return;
     }
 
+
     //This step is pretty important, so DONT TOUCH it unless you want the app to forget the user
     await saveUserInfo(name, pin);
 
-    // Add a short delay before reading the file to ensure it's flushed and available
     await Future.delayed(const Duration(seconds: 1));
 
-    // Test reading the file immediately after saving
     List<String> userInfo = await readUserInfo();
     print("User info from file: $userInfo");
 
@@ -140,7 +138,7 @@ class HomeScreen extends StatelessWidget {
 
   const HomeScreen({super.key, required this.welcomeBack});
 
-// Creates HomeScreen message... should be obvious
+  // Creates HomeScreen message... should be obvious
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,4 +149,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-

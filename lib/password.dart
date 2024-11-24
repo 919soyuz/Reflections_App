@@ -17,9 +17,13 @@ Future<void> saveUserInfo(String username, String pin) async {
     await file.create(recursive: true);
   }
 
-  await file.writeAsString('$username:$pin\n', mode: FileMode.append, flush: true);
+  // Format the string to include username and PIN in the desired format
+  String formattedData = 'Username: $username\n$username\'s Password: $pin\n';
 
-  print("User info saved: $username:$pin");
+  // Append the formatted string to the file
+  await file.writeAsString(formattedData, mode: FileMode.append, flush: true);
+
+  print("User info saved:\n$formattedData");
 }
 
 // Read all user info from the file
